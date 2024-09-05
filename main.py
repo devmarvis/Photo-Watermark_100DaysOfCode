@@ -19,10 +19,10 @@ def browsefunc():
 
 def apply_watermark():
     watermark_text = watermark_entry.get()
-    font = ImageFont.truetype('arial.ttf', 24)
+    font = ImageFont.truetype('comic.ttf', 26)
     with Image.open(img_path) as img:
         w, h = img.size
-        x, y = int(w / 2), int(h / 2)
+        x, y = int(w / 2) + int(w / 8), int(h / 2) + int(h / 3)
         draw = ImageDraw.Draw(img)
         draw.text((x, y), watermark_text, fill=(0, 0, 0), font=font, align='left')
         img.save(img_path)
