@@ -1,5 +1,7 @@
+import os.path
 import tkinter as tk
 from tkinter import filedialog
+from tkinter import messagebox
 from PIL import Image, ImageDraw, ImageFont
 
 window = tk.Tk()
@@ -15,17 +17,32 @@ def browsefunc():
 
     global img_path
     img_path = img_entry.get()
+    print(img_path)
 
 
 def apply_watermark():
     watermark_text = watermark_entry.get()
     font = ImageFont.truetype('comic.ttf', 26)
+    filename = os.path.basename(img_path)
+    dir_path = os.path.dirname(img_path)
+    sub_dir = 'watermarked'
+
     with Image.open(img_path) as img:
         w, h = img.size
         x, y = int(w / 2) + int(w / 8), int(h / 2) + int(h / 3)
         draw = ImageDraw.Draw(img)
         draw.text((x, y), watermark_text, fill=(0, 0, 0), font=font, align='left')
-        img.save(img_path)
+        new_dir = os.path.join(dir_path, sub_dir)
+        if not os.path.exists(new_dir):
+            os.makedirs(new_dir)
+
+        new_img_path = os.path.join(new_dir, filename)
+        img.save(new_img_path)
+
+        messagebox.showinfo(title="Watermark", message=f"Watermark has been successfully applied!")
+
+        img_entry.delete(0, tk.END)
+        watermark_entry.delete(0, tk.END)
 
 
 canvas = tk.Canvas(width=300, height=220, highlightthickness=0)
